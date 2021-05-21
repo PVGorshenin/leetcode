@@ -61,8 +61,8 @@ class Solution(object):
             self.i_pattern += 1
         if quantifier is '*':
             while not self._check_any_finished():
-                is_curr_match = self._check_letter_symbol(next_pattern)
-                if is_curr_match: break
+                if self.input_str[self.i_str] == next_pattern: break
+                self.i_str += 1
             self.i_pattern += 1
 
     def isMatch(self, input_str, pattern):
@@ -71,13 +71,14 @@ class Solution(object):
         while not(self._check_any_finished()):
             curr_pattern = pattern[self.i_pattern]
             quantifier = self._get_quantifier()
-            nex_pattern = self._get_next_pattern()
+            next_pattern = self._get_next_pattern()
             if curr_pattern != '.':
                 is_curr_match = self._check_letter_pattern(curr_pattern, quantifier)
+                if not is_curr_match:
+                    return False
             if curr_pattern == '.':
-                self._check_any_pattern(nex_pattern, quantifier)
-            if not is_curr_match:
-                return False
+                self._check_any_pattern(next_pattern, quantifier)
+                print(self.input_str[self.i_str:])
         if self._check_all_finished():
             return True
         return False
