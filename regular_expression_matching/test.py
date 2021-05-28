@@ -24,3 +24,18 @@ def test_letter_symbol(input_str, pattern, answer):
                   )
 def test_any_symbol(input_str, pattern, answer):
     assert Solution().isMatch(input_str, pattern) == answer
+
+
+@mark.parametrize('input_str, pattern, answer', [('aa', 'a*', True),
+                                                 ('ab', '.*', True),
+                                                 ('aab', 'c*a*b', True),
+                                                 ('mississippi', 'mis*is*p*.', False),
+                                                 ('aaa', 'a*a', True),
+                                                 ('aaa', 'a.*a', True),
+                                                 ('aaa', 'ab*a*c*a', True),
+                                                 ('aaa', 'aa*b*ac*', True),
+                                                 ('aaa', 'aa*.*ac*', True),
+                                                 ]
+                  )
+def test_site_ex(input_str, pattern, answer):
+    assert Solution().isMatch(input_str, pattern) == answer
