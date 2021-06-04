@@ -39,3 +39,11 @@ def test_any_symbol(input_str, pattern, answer):
                   )
 def test_site_ex(input_str, pattern, answer):
     assert Solution().isMatch(input_str, pattern) == answer
+
+
+@mark.parametrize('input_str, pattern, answer', [('a', '.*..a*', False),
+                                                ('ab', '.*..', True),
+                                                 ('abcdede', 'ab.*de', True)]
+                  )
+def test_site_ex2(input_str, pattern, answer):
+    assert Solution().isMatch(input_str, pattern) == answer

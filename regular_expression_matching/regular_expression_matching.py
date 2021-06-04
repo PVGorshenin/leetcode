@@ -17,8 +17,8 @@ class Solution(object):
         return None
 
     def _get_next_next_pattern(self):
-        if self.i_pattern < len(self.pattern)-2:
-            return self.pattern[self.i_pattern+2]
+        if self.i_pattern < len(self.pattern)-1:
+            return self.pattern[self.i_pattern+1]
         return None
 
     def is_pattern_fully_satisfied(self, pattern, next_pattern):
@@ -29,24 +29,14 @@ class Solution(object):
         return True
 
     def _check_pattern_collapsed(self):
-        least_pattern = self.pattern[self.i_pattern:]
-        for i_letter in range(len(least_pattern)-1):
-            if (least_pattern[i_letter] != '*') & (least_pattern[i_letter+1] != '*'):
-                return False
-        if least_pattern[-1] != '*':
-            return False
-        return True
-
-    def _check_pattern_eat_by_old_pattern(self):
         least_len = len(self.pattern) - self.i_pattern
         for i_letter in range(least_len-1):
-            if self.pattern[self.i_pattern] == '*':
-                self.i_pattern += 1
-            elif self.pattern[self.i_pattern+1] == '*' :
-                self.i_pattern += 1
-            elif self.pattern[self.i_pattern] in self.multiple_patterns:
-                self.i_pattern += 1
-                return self._check_pattern_collapsed()
+            if (self.pattern[self.i_pattern] != '*') & (self.pattern[self.i_pattern+1] != '*'):
+                if self.pattern[self.i_pattern] in self.multiple_patterns:
+                    self.multiple_patterns = set()
+                else:
+                    return False
+            self.i_pattern += 1
         if (self.pattern[-1] != '*') & (not self.pattern[-1] in self.multiple_patterns):
             return False
         return True
@@ -65,7 +55,6 @@ class Solution(object):
         is_patern_finished = self.i_pattern == len(self.pattern)
         if not is_patern_finished:
             is_patern_finished |= self._check_pattern_collapsed()
-            is_patern_finished |= self._check_pattern_eat_by_old_pattern()
         is_str_finished = self.i_str == len(self.input_str)
         return is_patern_finished & is_str_finished
 
@@ -79,7 +68,7 @@ class Solution(object):
         is_match_found = self._check_letter_symbol(curr_pattern)
         if (not is_match_found) & (curr_pattern in self.multiple_patterns):
             is_match_found = True
-        self.i_pattern += 1
+        if is_match_found: self.i_pattern += 1
         return is_match_found
 
     def _check_letter_pattern_quantifier(self, curr_pattern, next_pattern):
@@ -109,6 +98,8 @@ class Solution(object):
                     self.i_pattern += 1
                     self._check_letter_pattern_quantifier(next_pattern, next_next_pattern)
                     return
+                if next_pattern == '.':
+                    next_pattern = self.shift_next_pattern()
                 self.i_str += 1
             self.i_pattern += 1
 
