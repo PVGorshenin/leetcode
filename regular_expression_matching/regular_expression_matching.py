@@ -21,13 +21,6 @@ class Solution(object):
             return self.pattern[self.i_pattern+1]
         return None
 
-    def is_pattern_fully_satisfied(self, pattern, next_pattern):
-        if self.i_str < len(self.input_str)-1:
-            next_symbol = self.input_str[self.i_str+1]
-            if (next_symbol == pattern) & (pattern != next_pattern):
-                return False
-        return True
-
     def _check_pattern_collapsed(self):
         least_len = len(self.pattern) - self.i_pattern
         for i_letter in range(least_len-1):
@@ -40,6 +33,22 @@ class Solution(object):
         if (self.pattern[-1] != '*') & (not self.pattern[-1] in self.multiple_patterns):
             return False
         return True
+
+    def _check_str_collapsed(self):
+        least_len = len(self.input_str) - self.i_str
+        if '.*' in self.pattern:
+            curr_neg_index = -1
+            while (least_len>0) & (len(self.pattern)+curr_neg_index>=1):
+                if (self.pattern[curr_neg_index] == '*') & (self.pattern[curr_neg_index-1]=='.'):
+                    return True
+                if self.input_str[curr_neg_index] == self.pattern[curr_neg_index]:
+                    curr_neg_index -= 1
+                    least_len -= 1
+                else:
+                    return False
+            if (self.pattern[curr_neg_index] == '*') & (self.pattern[curr_neg_index-1]=='.'):
+                return True
+        return False
 
     def shift_next_pattern(self):
         self.i_pattern += 1
@@ -56,6 +65,9 @@ class Solution(object):
         if not is_patern_finished:
             is_patern_finished |= self._check_pattern_collapsed()
         is_str_finished = self.i_str == len(self.input_str)
+        if is_patern_finished & (not is_str_finished):
+            self.i_pattern -= 1
+            is_str_finished |= self._check_str_collapsed()
         return is_patern_finished & is_str_finished
 
     def _check_letter_symbol(self, curr_pattern):
@@ -80,6 +92,7 @@ class Solution(object):
             if is_curr_match:
                 if curr_pattern == next_pattern:
                     next_pattern = self.shift_next_pattern()
+                    _ = self._get_quantifier()
             if not is_curr_match:
                 break
         self.i_pattern += 1
@@ -93,9 +106,9 @@ class Solution(object):
             while not self._check_str_or_pattern_finished():
                 if self.input_str[self.i_str] == next_pattern:
                     # .*a == a*
-                    next_next_pattern = self._get_next_next_pattern()
                     self.i_str += 1
                     self.i_pattern += 1
+                    next_next_pattern = self._get_next_next_pattern()
                     self._check_letter_pattern_quantifier(next_pattern, next_next_pattern)
                     return
                 if next_pattern == '.':

@@ -43,7 +43,9 @@ def test_site_ex(input_str, pattern, answer):
 
 @mark.parametrize('input_str, pattern, answer', [('a', '.*..a*', False),
                                                 ('ab', '.*..', True),
-                                                 ('abcdede', 'ab.*de', True)]
+                                                 ('abcdede', 'ab.*de', True),
+                                                 ('aaaaaaaaaaaaab', 'a*a*a*a*a*a*a*a*a*a*a*a*b', True),
+                                                 ('bbba', '.*b', False)]
                   )
 def test_site_ex2(input_str, pattern, answer):
     assert Solution().isMatch(input_str, pattern) == answer
