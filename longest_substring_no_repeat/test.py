@@ -1,4 +1,4 @@
-from longest_substring_no_repeat import Solution
+from longest_substring_no_repeat_linear import Solution
 from pytest import mark
 
 @mark.parametrize('input_str, answer', [('abv', 3),
@@ -6,7 +6,9 @@ from pytest import mark
                                         ('abvbv', 3),
                                         ('abcabcbb', 3),
                                         ('bbbbb', 1),
-                                        ('', 0)
+                                        ('', 0),
+                                        ('pwwkew', 3),
+                                        ('dvdf', 3)
                                         ]
                   )
 def test_solution(input_str, answer):
