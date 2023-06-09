@@ -1,4 +1,4 @@
-from regular_expression_matching import Solution
+from regexp_matching_reduced import Solution
 from pytest import mark
 
 @mark.parametrize('input_str, pattern, answer', [('aa', 'a', False),
@@ -45,7 +45,11 @@ def test_site_ex(input_str, pattern, answer):
                                                 ('ab', '.*..', True),
                                                  ('abcdede', 'ab.*de', True),
                                                  ('aaaaaaaaaaaaab', 'a*a*a*a*a*a*a*a*a*a*a*a*b', True),
-                                                 ('bbba', '.*b', False)]
+                                                 ('bbba', '.*b', False),
+                                                 ('mississippi', 'mis*is*ip*.', True),
+                                                 ('aaba', 'ab*a*c*a', False),
+                                                 ('abbbcd', 'ab*bbbcd', True),
+                                                 ('aabcbcbcaccbcaabc', ".*a*aa*.*b*.c*.*a*", True)]
                   )
 def test_site_ex2(input_str, pattern, answer):
     assert Solution().isMatch(input_str, pattern) == answer
