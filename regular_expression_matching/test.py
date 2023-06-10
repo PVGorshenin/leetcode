@@ -1,4 +1,4 @@
-from regexp_matching_reduced import Solution
+from regexp_matrices import Solution
 from pytest import mark
 
 @mark.parametrize('input_str, pattern, answer', [('aa', 'a', False),
