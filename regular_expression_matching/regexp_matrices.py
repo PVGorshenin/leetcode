@@ -6,7 +6,7 @@ class Solution():
 
 
     def is_real_symbol(self, pattern):
-        is_not_real_symbol = ('*' in pattern) | ('.' in pattern)
+        is_not_real_symbol = ('*' in pattern)
         return not is_not_real_symbol and len(pattern)
 
     def _reduce_pattern(self):
@@ -22,7 +22,7 @@ class Solution():
                     curr_pattern += '*'
                     i_symb += 1
 
-            if (curr_pattern == previous_pattern) and (not self.is_real_symbol(curr_pattern)):
+            if (curr_pattern == previous_pattern) and '*' in curr_pattern:
                 pass
             elif self.is_real_symbol(curr_pattern) and self.is_real_symbol(previous_pattern):
                 pattern_lst[-1] += curr_pattern
@@ -43,26 +43,50 @@ class Solution():
             if self.is_real_symbol(pattern):
                 for match in re.finditer(pattern, self.input_str):
                     self.match_matrix[i_row, match.span()[0]:match.span()[1]] = 1
-            if '.' in pattern:
-                self.match_matrix[i_row] = 1
 
     def get_priority(self, pattern_lst):
         priority_lst = []
         median = len(pattern_lst) // 2
+
         for i_from_border in range(median):
             last_now = self.reduced_pattern_lst[-(i_from_border+1)]
             first_now = self.reduced_pattern_lst[i_from_border]
 
-            if self.is_real_symbol(last_now) or last_now == '.':
+            if self.is_real_symbol(last_now):
                 priority_lst.append(len(pattern_lst) - i_from_border - 1)
 
-            if self.is_real_symbol(first_now) or first_now == '.':
+            if self.is_real_symbol(first_now):
                 priority_lst.append(i_from_border)
 
         if len(pattern_lst) % 2:
             median_el = self.reduced_pattern_lst[median]
-            if self.is_real_symbol(median_el) or median_el == '.':
+            if self.is_real_symbol(median_el):
                 priority_lst.append(median)
+
+        for i_from_border in range(median):
+            last_now = self.reduced_pattern_lst[-(i_from_border+1)]
+            first_now = self.reduced_pattern_lst[i_from_border]
+
+            if self.is_real_symbol(last_now):
+                priority_lst.append(len(pattern_lst) - i_from_border - 1)
+
+            if self.is_real_symbol(first_now):
+                priority_lst.append(i_from_border)
+
+        if len(pattern_lst) % 2:
+            median_el = self.reduced_pattern_lst[median]
+            if self.is_real_symbol(median_el) or '.' in median_el:
+                priority_lst.append(median)
+
+        for i_from_border in range(median):
+            last_now = self.reduced_pattern_lst[-(i_from_border + 1)]
+            first_now = self.reduced_pattern_lst[i_from_border]
+
+            if '.*' in last_now:
+                priority_lst.append(len(pattern_lst) - i_from_border - 1)
+
+            if '.*' in first_now:
+                priority_lst.append(i_from_border)
 
         for i_from_border in range(median):
             last_now = self.reduced_pattern_lst[-(i_from_border + 1)]
@@ -81,6 +105,7 @@ class Solution():
 
     def add_zeros_to_matrix(self, i_row, i_col, len_of_pattern):
         self.match_matrix[:i_row, i_col:] = 0
+        print(i_row, i_col)
         self.match_matrix[i_row:, :i_col + len_of_pattern] = 0
         self.match_matrix[i_row] = 0
         self.match_matrix[i_row, i_col: i_col + len_of_pattern] = 1
@@ -90,38 +115,54 @@ class Solution():
         for i_priority, curr_row in enumerate(self.priority_lst):
             curr_pattern = self.reduced_pattern_lst[curr_row]
             has_match_found = False
-            print(curr_pattern)
+            # print(curr_pattern, median)
 
             if '*' in curr_pattern:
+
                 if curr_row >= median:
-                    for i_col in range(self.match_matrix.shape[1]-1, 0, -1):
+                    for i_col in range(self.match_matrix.shape[1]-1, -1, -1):
                         if self.match_matrix[curr_row, i_col] == 1:
                             finish_col = i_col
-                            while (self.match_matrix[curr_row, i_col] == 1) and (i_col >= 0):
+
+                            while (i_col >= 0) and (self.match_matrix[curr_row, i_col] == 1):
                                 start_col = i_col
                                 i_col -= 1
-                    len_of_ones = finish_col - start_col
 
-                    self.add_zeros_to_matrix(curr_row, start_col, len_of_ones)
+                            len_of_ones = finish_col - start_col + 1
+                            self.add_zeros_to_matrix(curr_row, start_col, len_of_ones)
+                            break
 
+                if curr_row < median:
+                    for i_col in range(0, self.match_matrix.shape[1]):
+                        if self.match_matrix[curr_row, i_col] == 1:
+                            start_col = i_col
 
-            if curr_row >= median:
-                for i_col in range(self.match_matrix.shape[1], 0, -1):
-                    if self.match_matrix[curr_row, i_col:i_col + len(curr_pattern)].sum() == len(curr_pattern):
-                        has_match_found = True
-                        self.add_zeros_to_matrix(curr_row, i_col, len(curr_pattern))
+                            while (i_col < self.match_matrix.shape[1]) and (self.match_matrix[curr_row, i_col] == 1):
+                                finish_col = i_col
+                                i_col += 1
 
-            if curr_row < median:
-                for i_col in range(self.match_matrix.shape[1]):
+                            len_of_ones = finish_col - start_col + 1
+                            self.add_zeros_to_matrix(curr_row, start_col, len_of_ones)
+                            break
 
-                    if self.match_matrix[curr_row, i_col: i_col + len(curr_pattern)].sum() == len(curr_pattern):
-                        has_match_found = True
-                        self.add_zeros_to_matrix(curr_row, i_col, len(curr_pattern))
+            else:
+                if curr_row >= median:
+                    for i_col in range(self.match_matrix.shape[1]-1, -1, -1):
+                        if self.match_matrix[curr_row, i_col:i_col + len(curr_pattern)].sum() == len(curr_pattern):
+                            has_match_found = True
+                            self.add_zeros_to_matrix(curr_row, i_col, len(curr_pattern))
 
-                        # print(curr_pattern, i_col, curr_row)
-                        # print(self.match_matrix)
-            if not has_match_found:
-                return False
+                if curr_row < median:
+                    for i_col in range(self.match_matrix.shape[1]):
+                        if self.match_matrix[curr_row, i_col: i_col + len(curr_pattern)].sum() == len(curr_pattern):
+                            has_match_found = True
+                            self.add_zeros_to_matrix(curr_row, i_col, len(curr_pattern))
+
+                print(has_match_found)
+                if not has_match_found:
+                    return False
+
+        return True
 
 
     def isMatch(self, input_str, pattern):
@@ -137,7 +178,10 @@ class Solution():
 
         self.priority_lst = self.get_priority(self.reduced_pattern_lst)
 
-        self.decision()
+        has_tmth_found = self.decision()
+        if not has_tmth_found:
+            return False
+
         print()
         print('input --> ', self.input_str)
         print('pattern -->', self.pattern)
@@ -149,6 +193,7 @@ class Solution():
 
 
 u = Solution()
-u.isMatch('mississippi', 'mis*is*ip*.')
+u.isMatch('cabbbbcbcacbabc', '.*b.*.ab*.*b*a*c')
+print(u.reduced_pattern_lst, u.priority_lst)
 
 

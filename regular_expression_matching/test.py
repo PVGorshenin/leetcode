@@ -35,6 +35,7 @@ def test_any_symbol(input_str, pattern, answer):
                                                  ('aaa', 'ab*a*c*a', True),
                                                  ('aaa', 'aa*b*ac*', True),
                                                  ('aaa', 'aa*.*ac*', True),
+                                                 ('ab', '.*c', False)
                                                  ]
                   )
 def test_site_ex(input_str, pattern, answer):
@@ -49,7 +50,10 @@ def test_site_ex(input_str, pattern, answer):
                                                  ('mississippi', 'mis*is*ip*.', True),
                                                  ('aaba', 'ab*a*c*a', False),
                                                  ('abbbcd', 'ab*bbbcd', True),
-                                                 ('aabcbcbcaccbcaabc', ".*a*aa*.*b*.c*.*a*", True)]
+                                                 ('aabcbcbcaccbcaabc', ".*a*aa*.*b*.c*.*a*", True),
+                                                 ('abbabaaaaaaacaa', "a*.*b.a.*c*b*a*c*", True),
+                                                 ('cabbbbcbcacbabc', '.*b.*.ab*.*b*a*c', True),
+                                                 ('baabbbaccbccacacc', "c*..b*a*a.*a..*c", True)]
                   )
 def test_site_ex2(input_str, pattern, answer):
     assert Solution().isMatch(input_str, pattern) == answer
