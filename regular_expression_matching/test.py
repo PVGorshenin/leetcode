@@ -59,7 +59,9 @@ def test_site_ex(input_str, pattern, answer):
                                                  ('aacaaacbacccbcba', 'c*a*.*a*.a.ac*bc', False),
                                                  ('abbbaabccbaabacab', 'ab*b*b*bc*ac*.*bb*', True),
                                                  ('babbcabcaabbbacaca', 'bb*.c*.c*b*b.*c', False),
-                                                 ('aaaaaaaaaaaaaaaaaa', 'a*aaaa*aa.aaa.aaaa.a', True)]
+                                                 ('aaaaaaaaaaaaaaaaaa', 'a*aaaa*aa.aaa.aaaa.a', True),
+                                                 ('abcaacacccacaabcca', 'a*a*a*aabab*c*.', False),
+                                                 ('bbcbbcbcbbcaabcacb', 'a*.*ac*a*a*.a..*.*', False)]
                   )
 def test_site_ex2(input_str, pattern, answer):
     assert Solution().isMatch(input_str, pattern) == answer

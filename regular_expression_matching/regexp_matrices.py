@@ -37,6 +37,8 @@ class Solution():
         return pattern_lst
 
     def fillup_matrix(self):
+
+
         for i_row, pattern in enumerate(self.reduced_pattern_lst):
             pattern = pattern.replace('*', '')
             re_pattern = re.compile(r'(?=({}))'.format(pattern))
@@ -173,8 +175,27 @@ class Solution():
 
         return True
 
-    def _here_we_go_again(self, input_str, pattern, pattern_to_turn=None, pattern_to_move=None, starting_point=0):
+    def _checkk_all_real_filled(self):
+        for i_real in self.priority_lst:
+            real_pattern = self.reduced_pattern_lst[i_real]
+            if self.is_real_symbol(real_pattern):
+                if self.match_matrix[i_real].sum() == 0:
+                    return False
+        return True
 
+    def _check_is_real_match(self):
+        for i_real in self.priority_lst:
+            real_pattern = self.reduced_pattern_lst[i_real]
+            if self.is_real_symbol(real_pattern):
+                mask = self.match_matrix[i_real].astype(bool)
+                str_pattern = ''.join(np.array(list(self.input_str))[mask])
+
+            is_match = len(re.findall(real_pattern, str_pattern)) > 0
+            if is_match == False: return False
+
+        return True
+
+    def _here_we_go_again(self, input_str, pattern, pattern_to_turn=None, pattern_to_move=None, starting_point=0):
 
         self.pattern = pattern
         self.input_str = input_str
@@ -190,9 +211,18 @@ class Solution():
             starting_point=starting_point)
 
         is_match = self.match_matrix.sum(0).sum() == len(self.input_str)
-        is_rows_ones = self.match_matrix.sum(0).max() == 1
+        if is_match:
+            is_rows_ones = self.match_matrix.sum(0).max() == 1
+            is_match &= is_rows_ones
 
-        is_match &= is_rows_ones
+        if is_match:
+            is_real_filled = self._checkk_all_real_filled()
+            is_match &= is_real_filled
+
+        if is_match:
+            is_real_matched = self._check_is_real_match()
+            is_match &= is_real_matched
+
         return is_match
 
     def aux_print(self, is_match):
@@ -211,6 +241,7 @@ class Solution():
         self.reduced_pattern_lst = self._reduce_pattern()
         self.match_matrix = np.zeros((len(self.reduced_pattern_lst), len(self.input_str)))
         self.fillup_matrix()
+        # print(self.match_matrix)
         self.priority_lst = self.get_priority(self.reduced_pattern_lst)
 
 
@@ -220,24 +251,23 @@ class Solution():
 
         is_match = self.match_matrix.sum(0).sum() == len(self.input_str)
         is_rows_ones = self.match_matrix.sum(0).max() == 1
-        # is_col_ones = self.match_matrix.sum(1).min() > 0
-        is_match &= is_rows_ones
 
-        self.aux_print(is_match)
+        is_real_filled = self._checkk_all_real_filled()
+
+        is_match &= is_rows_ones & is_real_filled
+
 
         if is_match:
             return True
 
-        self.aux_print(is_match)
-        # print(self.match_matrix)
-
         try_count = 2
-
         if len(input_str) > 5:
             while not is_match and try_count >= 0:
+
                 for ix, pattern_to_move in enumerate(self.priority_lst):
 
                     if not self.is_real_symbol(self.reduced_pattern_lst[pattern_to_move]):
+                        try_count -= 1
                         break
 
                     is_match = self._here_we_go_again(
@@ -250,12 +280,13 @@ class Solution():
 
 
         if len(input_str) > 5:
-            try_count =  (len(self.input_str) - 1)
+            try_count =  len(self.input_str) - 1
             while not is_match and try_count >= 0:
                 for starting_point in range(1, len(self.input_str)):
                     for pattern_to_move in self.priority_lst:
                         for patter_to_turn in self.priority_lst:
                             if not self.is_real_symbol(self.reduced_pattern_lst[pattern_to_move]):
+                                try_count -= 1
                                 break
 
                             is_match = self._here_we_go_again(
@@ -268,15 +299,13 @@ class Solution():
                             try_count -= 1
 
                             if is_match:
-                                self.aux_print(is_match)
 
                                 return True
 
-        self.aux_print(is_match)
         return is_match
 
-u = Solution()
-# u.isMatch('ab', '.*c')
+# u = Solution()
+# print(u.isMatch('', ''))
 # u.isMatch('aaaaaaaaaaaaaaaaaa', 'a*aaaa*aa.aaa.aaaa.a')
 # print(u.reduced_pattern_lst, u.priority_lst)
 
