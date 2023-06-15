@@ -225,15 +225,6 @@ class Solution():
 
         return is_match
 
-    def aux_print(self, is_match):
-        print('input --> ', self.input_str)
-        print('pattern -->', self.pattern)
-        print('priority --> ', self.priority_lst)
-        print('reduced pattern', self.reduced_pattern_lst)
-        print('reduced pattern', [self.reduced_pattern_lst[i] for i in self.priority_lst])
-        print(is_match)
-        print(self.match_matrix)
-
     def isMatch(self, input_str, pattern):
         self.pattern = pattern
         self.input_str = input_str
@@ -304,9 +295,5 @@ class Solution():
 
         return is_match
 
-# u = Solution()
-# print(u.isMatch('', ''))
-# u.isMatch('aaaaaaaaaaaaaaaaaa', 'a*aaaa*aa.aaa.aaaa.a')
-# print(u.reduced_pattern_lst, u.priority_lst)
 
 
