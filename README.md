@@ -10,3 +10,4 @@
 - remove nth from the end &ensp; <img src="https://img.shields.io/badge/level-medium-yellow">  <img src="https://img.shields.io/badge/speed-beats: 79%25-lightblue"> <img src="https://img.shields.io/badge/ram-beats: 64%25-lightblue">
 - search in rotated sorted array &ensp; <img src="https://img.shields.io/badge/level-medium-yellow">  <img src="https://img.shields.io/badge/speed-beats: 91%25-lightblue"> <img src="https://img.shields.io/badge/ram-beats: 65%25-lightblue">
 - trapping water &ensp; <img src="https://img.shields.io/badge/level-hard-red">  <img src="https://img.shields.io/badge/speed-beats: 75%25-lightblue"> <img src="https://img.shields.io/badge/ram-beats: 99%25-lightblue">
+- reverse integer &ensp; <img src="https://img.shields.io/badge/level-medium-yellow">  <img src="https://img.shields.io/badge/speed-beats: 42%25-lightblue"> <img src="https://img.shields.io/badge/ram-beats: 28%25-lightblue">
