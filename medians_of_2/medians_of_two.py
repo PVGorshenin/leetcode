@@ -92,6 +92,13 @@ class Solution():
             print(f'Median element dosr2--> {median}')
             return median
 
+    def one_array_logic(self, arr):
+        median_ix = (len(arr) - 1) // 2
+        if len(arr) % 2:
+            return arr[median_ix]
+        else:
+            return 0.5 * (arr[median_ix] + arr[median_ix+1])
+
     def one_length_logic(self):
 
         x = self.arr1.arr[0]
@@ -141,6 +148,38 @@ class Solution():
 
         else:
             return self._median_found(arr2_less_equal_ix)
+
+    def mergesort(self, arr1, arr2):
+        res_arr = []
+        i, j = 0, 0
+        while True:
+            print(i, j)
+            cur_min = min(arr1[i], arr2[j])
+            if cur_min == arr1[i]:
+                res_arr.append(cur_min)
+                i += 1
+            if cur_min == arr2[j]:
+                res_arr.append(cur_min)
+                j += 1
+
+            if j >= len(arr2):
+                if i < len(arr1):
+                    res_arr.extend(arr1[i:])
+                break
+
+            if i >= len(arr1):
+                if j < len(arr2):
+                    res_arr.extend(arr2[j:])
+                break
+
+        assert len(res_arr) == len(arr1) + len(arr2)
+        is_odd = len(res_arr) % 2
+        median_position = (len(res_arr) - 1) // 2
+
+        if is_odd:
+            return res_arr[median_position]
+        else:
+            return 0.5 * (res_arr[median_position] + res_arr[median_position+1])
 
     def three_length_logic(self):
         if self.arr2.arr[0] <= self.arr1.arr[0] <= self.arr2.arr[1]:
@@ -209,6 +248,18 @@ class Solution():
 
     def findMedianSortedArrays(self, nums1, nums2) -> float:
 
+        if nums1 == []:
+            return self.one_array_logic(nums2)
+
+        if nums2 == []:
+            return self.one_array_logic(nums1)
+
+        if len(set(nums2) and set(nums1)) == 1:
+            return nums1[0]
+
+        if len(nums1 + nums2) <= 5:
+            return self.mergesort(nums1, nums2)
+
         self.arr1 = Array(nums1)
         self.arr2 = Array(nums2)
 
@@ -245,25 +296,16 @@ class Solution():
                 return self._median_found(arr2_less_equal_ix)
 
             index_distance_first_arr = self.arr1.right_margin - self.arr1.left_margin
-            print(index_distance_first_arr)
+
 
         if (len(self.arr1.arr) == 1) and (len(self.arr2.arr) == 1):
             return 0.5 * self.arr1.arr[0] + 0.5 * self.arr2.arr[0]
-
-        if (len(self.arr1.arr) == 1) and (len(self.arr2.arr) == 2):
-            return self.three_length_logic()
-
-        if (len(self.arr1.arr) == 2) and (len(self.arr2.arr) == 1):
-            tmp = self.arr2.arr
-            self.arr2.arr = self.arr1.arr
-            self.arr1.arr = tmp
-            return self.three_length_logic()
 
         if len(self.arr1.arr) == 1:
             return self.one_length_logic()
 
         if len(self.arr1.arr) == 2:
-            return self.two_length_logic()
+            self.two_length_logic()
 
         united_left_pointer = self.arr1.left_margin + self.arr2.left_margin + unification_ix_additive
         united_right_pointer = self.arr1.right_margin + self.arr2.right_margin + unification_ix_additive
@@ -274,7 +316,8 @@ class Solution():
         return median_el
 
 a = [1, 3]
-b = [2]
+b = [2, 7]
+
 print(Solution().findMedianSortedArrays(a, b))
 
 def find_median(a, b):
