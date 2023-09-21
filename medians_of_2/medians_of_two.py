@@ -79,20 +79,31 @@ class Solution():
 
         if self.is_odd:
             median = self._check_center_pos()
-            print(f'Median element dosr1--> {median}')
+            print(f'Median element dosr odd--> {median}')
             return median
 
         else:
-            left_el = self._check_center_pos()
+
+            less_or_equal_hasnt_found = arr2_less_equal_ix == 0 and \
+                                        self.arr2.arr[arr2_less_equal_ix] > self.arr1.arr[self.arr1.center]
+
             next_el_shift = 1
+
+            if less_or_equal_hasnt_found:
+                left_el = self.arr2.arr[arr2_less_equal_ix]
+
+            else:
+                left_el = self._check_center_pos()
 
             right_el = min(self.arr1.arr[self.arr1.center + next_el_shift],
                            self.arr2.arr[arr2_less_equal_ix + next_el_shift])
+
             median = (left_el + right_el) / 2
-            print(f'Median element dosr2--> {median}')
+            print(f'Median element dosr even--> {median}')
             return median
 
     def one_array_logic(self, arr):
+
         median_ix = (len(arr) - 1) // 2
         if len(arr) % 2:
             return arr[median_ix]
@@ -126,34 +137,52 @@ class Solution():
             elif is_more_arr2_median:
                 return 0.5 * (self.arr2.arr[self.arr2.center] + self.arr2.arr[self.arr2.center + 1])
 
-    def two_length_logic(self):
-
-        unification_ix_additive = 1
-
-        self.arr1.center = 1
+    def two_length_logic(self, has_searched):
 
         self.arr2.snapshot()
-        arr2_less_equal_ix = self._find_balance_position(
+        arr2_less_equal_ix_left = self._find_balance_position(
             arr2=self.arr2,
-            point=self.arr1.arr[self.arr1.center])
+            point=self.arr1.arr[0])
         self.arr2.restore()
 
-        balance_point = 1 + arr2_less_equal_ix + unification_ix_additive
+        less_or_equal_hasnt_found = arr2_less_equal_ix_left == 0 and \
+                                    self.arr2.arr[arr2_less_equal_ix_left] > self.arr1.arr[0]
 
-        if balance_point != self.median_position:
-            self._move_borders(
-                balance_point=balance_point,
-                arr2_less_equal_ix=arr2_less_equal_ix
-            )
+        self.arr2.snapshot()
+        arr2_less_equal_ix_right = self._find_balance_position(
+            arr2=self.arr2,
+            point=self.arr1.arr[1])
+        self.arr2.restore()
 
+        next_of_less_or_eq = int(not less_or_equal_hasnt_found)
+        self.arr2.arr.insert(arr2_less_equal_ix_left + next_of_less_or_eq, self.arr1.arr[0])
+
+        if arr2_less_equal_ix_right + 2 > len(self.arr2.arr) - 1:
+            self.arr2.arr.append(self.arr1.arr[1])
         else:
-            return self._median_found(arr2_less_equal_ix)
+            self.arr2.arr.insert(arr2_less_equal_ix_right + 2, self.arr1.arr[1])
+
+        if not has_searched:
+            return self.one_array_logic(self.arr2.arr)
+
+        unification_ix_additive = 1
+        unified_left_pointer = self.arr1.left_margin + self.arr2.left_margin + unification_ix_additive
+
+        distance_to_median = self.median_position - unified_left_pointer
+
+        if self.is_odd:
+            return self.arr2.arr[self.arr2.left_margin + distance_to_median + 1]
+
+        two_el_median = 0.5 * (self.arr2.arr[self.arr2.left_margin + distance_to_median + 1] +
+                         self.arr2.arr[self.arr2.left_margin + distance_to_median + 2])
+        return two_el_median
 
     def mergesort(self, arr1, arr2):
+        print('mergesort')
         res_arr = []
         i, j = 0, 0
         while True:
-            print(i, j)
+
             cur_min = min(arr1[i], arr2[j])
             if cur_min == arr1[i]:
                 res_arr.append(cur_min)
@@ -180,13 +209,6 @@ class Solution():
             return res_arr[median_position]
         else:
             return 0.5 * (res_arr[median_position] + res_arr[median_position+1])
-
-    def three_length_logic(self):
-        if self.arr2.arr[0] <= self.arr1.arr[0] <= self.arr2.arr[1]:
-            return self.arr1.arr[0]
-        if self.arr1.arr[0] >= self.arr2.arr[1]:
-            return self.arr2.arr[1]
-        return self.arr2.arr[0]
 
     def _unintersect_script(self, arr1, arr2):
 
@@ -218,34 +240,6 @@ class Solution():
             print(f'Median element uninter--> {left_el}')
             return left_el
 
-    def _final_chunk_odd_logic(self, left_pointer, right_pointer):
-
-        if (left_pointer < self.median_position) & (right_pointer > self.median_position):
-            shift = self.median_position - left_pointer
-            return self.arr2.arr[self.arr2.left_margin + shift]
-
-        elif left_pointer > self.median_position:
-            return self.arr2.arr[self.median_position]
-
-        elif right_pointer < self.median_position:
-            return self.arr2.arr[self.median_position - len(self.arr1.arr)]
-
-    def _final_chunk_pass(self, left_pointer, right_pointer):
-
-        if self.is_odd:
-            return self._final_chunk_odd_logic(left_pointer, right_pointer)
-
-        else:
-            left_el = self._final_chunk_odd_logic(left_pointer, right_pointer)
-            next_el_shift = 1
-            self.median_position += next_el_shift
-
-            if right_pointer == self.median_position:
-                right_el = self.arr1.arr[self.arr1.right_margin]
-            else:
-                right_el = self._final_chunk_odd_logic(left_pointer, right_pointer)
-            return (left_el + right_el) / 2
-
     def findMedianSortedArrays(self, nums1, nums2) -> float:
 
         if nums1 == []:
@@ -254,11 +248,16 @@ class Solution():
         if nums2 == []:
             return self.one_array_logic(nums1)
 
-        if len(set(nums2) and set(nums1)) == 1:
+        if len(set(nums2) | set(nums1)) == 1:
             return nums1[0]
 
         if len(nums1 + nums2) <= 5:
             return self.mergesort(nums1, nums2)
+
+        if len(nums2) < len(nums1):
+            temp = nums2
+            nums2 = nums1
+            nums1 = temp
 
         self.arr1 = Array(nums1)
         self.arr2 = Array(nums2)
@@ -305,28 +304,12 @@ class Solution():
             return self.one_length_logic()
 
         if len(self.arr1.arr) == 2:
-            self.two_length_logic()
+            return self.two_length_logic(has_searched=False)
 
-        united_left_pointer = self.arr1.left_margin + self.arr2.left_margin + unification_ix_additive
-        united_right_pointer = self.arr1.right_margin + self.arr2.right_margin + unification_ix_additive
-
-        median_el = self._final_chunk_pass(united_left_pointer, united_right_pointer)
-        print(f'Median element--> {median_el}')
-
-        return median_el
-
-a = [1, 3]
-b = [2, 7]
-
-print(Solution().findMedianSortedArrays(a, b))
-
-def find_median(a, b):
-    print()
-    print('np median -->', np.median(a+b))
-    print(sorted(a+b))
-
-find_median(a, b)
-
+        if self.arr1.right_margin - self.arr1.left_margin == 1:
+            self.arr1.arr = [self.arr1.arr[self.arr1.left_margin],
+                             self.arr1.arr[self.arr1.right_margin]]
+            return self.two_length_logic(has_searched=True)
 
 
 
