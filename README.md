@@ -26,7 +26,7 @@
 <img src="https://img.shields.io/badge/ram-beats: 9%25-lightblue">&nbsp;
 - regexp matching &nbsp;
 <img src="https://img.shields.io/badge/level-hard-red">&nbsp;
-<img src="https://img.shields.io/badge/speed-beats: 5%25-lightblue">&nbsp; 
+<img src="https://img.shields.io/badge/speed-beats: 7%25-lightblue">&nbsp; 
 <img src="https://img.shields.io/badge/ram-beats: 6%25-lightblue">&nbsp;
 - remove nth from the end &nbsp;
 <img src="https://img.shields.io/badge/level-medium-yellow">&nbsp; 
@@ -46,6 +46,6 @@
 <img src="https://img.shields.io/badge/ram-beats: 28%25-lightblue">&nbsp;
 - surrounded regions &nbsp;
 <img src="https://img.shields.io/badge/level-medium-yellow">&nbsp; 
-<img src="https://img.shields.io/badge/speed-beats: 5%25-lightblue">&nbsp; 
-<img src="https://img.shields.io/badge/ram-beats: 13%25-lightblue">&nbsp;
+<img src="https://img.shields.io/badge/speed-beats: 45%25-lightblue">&nbsp; 
+<img src="https://img.shields.io/badge/ram-beats: 96%25-lightblue">&nbsp;
 

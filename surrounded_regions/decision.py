@@ -1,6 +1,4 @@
 from typing import List
-import numpy as np
-from time import time
 
 
 class Solution:
@@ -8,7 +6,7 @@ class Solution:
     def find_belonging_groups(self, connected_groups, i_row, i_col):
         found_groups = []
         for i_group, group in enumerate(connected_groups):
-            for point in group['connected_seq']:
+            for point in reversed(group['connected_seq']):
                 is_neighbour = ((abs(i_row - point[0]) == 1) &  (i_col == point[1]) |
                                  (abs(i_col - point[1]) == 1) & (i_row == point[0]))
                 if is_neighbour:
