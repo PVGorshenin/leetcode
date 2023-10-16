@@ -48,8 +48,12 @@
 <img src="https://img.shields.io/badge/level-medium-yellow">&nbsp; 
 <img src="https://img.shields.io/badge/speed-beats: 45%25-lightblue">&nbsp; 
 <img src="https://img.shields.io/badge/ram-beats: 96%25-lightblue">&nbsp;
-- merge intervals regions &nbsp;
+- merge intervals &nbsp;
 <img src="https://img.shields.io/badge/level-medium-yellow">&nbsp; 
 <img src="https://img.shields.io/badge/speed-beats: 5%25-lightblue">&nbsp; 
 <img src="https://img.shields.io/badge/ram-beats: 5%25-lightblue">&nbsp;
+- phone's letter combination &nbsp;
+<img src="https://img.shields.io/badge/level-medium-yellow">&nbsp; 
+<img src="https://img.shields.io/badge/speed-beats: 57%25-lightblue">&nbsp; 
+<img src="https://img.shields.io/badge/ram-beats: 36%25-lightblue">&nbsp;
 
