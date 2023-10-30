@@ -46,8 +46,8 @@
 <img src="https://img.shields.io/badge/ram-beats: 28%25-lightblue">&nbsp;
 - surrounded regions &nbsp;
 <img src="https://img.shields.io/badge/level-medium-yellow">&nbsp; 
-<img src="https://img.shields.io/badge/speed-beats: 45%25-lightblue">&nbsp; 
-<img src="https://img.shields.io/badge/ram-beats: 96%25-lightblue">&nbsp;
+<img src="https://img.shields.io/badge/speed-beats: 77%25-lightblue">&nbsp; 
+<img src="https://img.shields.io/badge/ram-beats: 67%25-lightblue">&nbsp;
 - merge intervals &nbsp;
 <img src="https://img.shields.io/badge/level-medium-yellow">&nbsp; 
 <img src="https://img.shields.io/badge/speed-beats: 5%25-lightblue">&nbsp; 

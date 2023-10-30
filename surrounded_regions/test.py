@@ -1,5 +1,5 @@
 from pytest import mark
-from decision import Solution
+from surrounded_regions_dfs import Solution
 
 
 @mark.parametrize('board, answer', [
