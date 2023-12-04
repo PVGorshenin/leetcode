@@ -56,4 +56,8 @@
 <img src="https://img.shields.io/badge/level-medium-yellow">&nbsp; 
 <img src="https://img.shields.io/badge/speed-beats: 57%25-lightblue">&nbsp; 
 <img src="https://img.shields.io/badge/ram-beats: 36%25-lightblue">&nbsp;
+- 3sum closest
+<img src="https://img.shields.io/badge/level-medium-yellow">&nbsp; 
+<img src="https://img.shields.io/badge/speed-beats: 21%25-lightblue">&nbsp; 
+<img src="https://img.shields.io/badge/ram-beats: 16%25-lightblue">&nbsp;
 
