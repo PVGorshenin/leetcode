@@ -181,9 +181,11 @@ class Solution():
         while True:
 
             cur_min = min(arr1[i], arr2[j])
+
             if cur_min == arr1[i]:
                 res_arr.append(cur_min)
                 i += 1
+
             if cur_min == arr2[j]:
                 res_arr.append(cur_min)
                 j += 1

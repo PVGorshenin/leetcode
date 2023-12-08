@@ -24,10 +24,13 @@ class Solution:
 
         for move in moves:
             row_shift, col_shift = move
+
             if matrix[i_row+row_shift][i_col+col_shift] > matrix[i_row][i_col]:
                 curr_key = f'{i_row+row_shift},{i_col+col_shift}'
+
                 if curr_key in self.res_dct:
                     curr_len = self.res_dct[curr_key]
+
                 else:
                     curr_len = self._find_bigger_neighbours(matrix, i_row+row_shift, i_col+col_shift)
                 max_len = max(curr_len, max_len)
