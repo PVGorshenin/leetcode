@@ -16,6 +16,7 @@ class Solution:
             window_size = i_right - i_left + 1
             curr_char = s[i_right]
             chars_freq[curr_char] += 1
+
             if chars_freq[curr_char] > chars_freq[most_freq_char]:
                 most_freq_char = curr_char
 
